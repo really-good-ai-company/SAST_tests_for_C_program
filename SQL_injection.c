@@ -7,6 +7,7 @@
     The instruction will be executed without sanitization.
 
     The program is meant to be flagged by SAST tool for possible SQL injection.
+    comment so i can kick off greptile
 
 */
 #include <stdio.h>
