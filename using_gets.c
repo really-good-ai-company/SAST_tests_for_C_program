@@ -4,7 +4,9 @@ int main() {
     char buffer[50];
 
     printf("Enter a string: ");
-    gets(buffer);  // Insecure: gets does not perform buffer size checking
+    if (fgets(buffer, sizeof(buffer), stdin) == NULL) {
+        buffer[0] = '\0';
+    }
 
     printf("You entered: %s\n", buffer);
     return 0;

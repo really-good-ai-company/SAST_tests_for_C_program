@@ -16,7 +16,8 @@ int main() {
     // Open a common file
     FILE *file = fopen("/etc/passwd", "r");
     if (file == NULL) {
-        return -1; // Return -1 and leak memory if file opening fails
+        free(buffer); // Release the buffer before returning if file opening fails
+        return -1;
     }
 
     // Read the first character

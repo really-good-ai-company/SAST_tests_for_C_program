@@ -52,7 +52,11 @@ int main() {
     char user_input[256];
     printf("Enter a SQL command: ");
     // Example user input:INSERT INTO Users(Id, Name) VALUES(1, 'Alice'); DROP TABLE Users;
-    fgets(user_input, 256, stdin);
+    if (fgets(user_input, sizeof(user_input), stdin) == NULL) {
+        printf("\nNo SQL command received.\n");
+        sqlite3_close(db);
+        return 1;
+    }
     user_input[strcspn(user_input, "\n")] = 0; // Remove newline character
     rc = sqlite3_exec(db, user_input, 0, 0, &err_msg);
 

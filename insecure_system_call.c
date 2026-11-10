@@ -18,17 +18,13 @@
 
 int main() {
     char userInput[256];
-    char command[300] = "echo ";
 
     printf("Enter a command: ");
     fgets(userInput, sizeof(userInput), stdin);
     userInput[strcspn(userInput, "\n")] = 0; // Remove newline character
 
-    // Dangerous: appending user input directly to a system command
-    strcat(command, userInput);
-
-    // Execute the command - This is a security risk!
-    system(command);
+    // Safe: print the input directly, never passing it to a shell
+    printf("echo %s\n", userInput);
 
     return 0;
 }

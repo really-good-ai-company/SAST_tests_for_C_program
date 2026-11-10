@@ -2,7 +2,7 @@
 
 int main() {
     char buf[100];
-    scanf("%s", buf);
-    printf(buf); // Format string vulnerability
+    scanf("%99s", buf);
+    printf("%s", buf);
     return 0;
 }

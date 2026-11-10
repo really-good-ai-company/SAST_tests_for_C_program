@@ -7,11 +7,19 @@
 #include <string.h>
 
 int main() {
-    char inputPassword[50];
-    const char *hardcodedPassword = "secret123";  // Hardcoded password
+    char inputPassword[50] = {0};
+    const char *hardcodedPassword = getenv("CRITICAL_FILE_PASSWORD");  // Password comes from the deployment
+
+    if (hardcodedPassword == NULL || hardcodedPassword[0] == '\0') {
+        fprintf(stderr, "CRITICAL_FILE_PASSWORD is not set.\n");
+        return 1;
+    }
 
     printf("Enter password to access the system file: ");
-    fgets(inputPassword, sizeof(inputPassword), stdin);
+    if (fgets(inputPassword, sizeof(inputPassword), stdin) == NULL) {
+        fprintf(stderr, "Error reading password.\n");
+        return 1;
+    }
     inputPassword[strcspn(inputPassword, "\n")] = 0; // Remove newline character
 
     if (strcmp(inputPassword, hardcodedPassword) == 0) {

@@ -2,9 +2,9 @@
 #include <string.h>
 
 int main() {
-    char buffer[10];
-    // This line deliberately causes a buffer overflow
-    strcpy(buffer, "This string is way too long for the buffer");
+    char buffer[64];
+    // Copy with the destination size so the literal cannot overflow the buffer
+    snprintf(buffer, sizeof(buffer), "%s", "This string is way too long for the buffer");
     printf("%s\n", buffer);
     return 0;
 }

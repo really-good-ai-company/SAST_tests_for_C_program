@@ -2,10 +2,13 @@
 #include <stdio.h>
 
 volatile int counter = 0;  // Global counter
+pthread_mutex_t counter_mutex = PTHREAD_MUTEX_INITIALIZER;  // Guards counter
 
 void* incrementCounter(void* arg) {
     for (int i = 0; i < 100000; ++i) {
-        counter++;  // Direct increment without synchronization
+        pthread_mutex_lock(&counter_mutex);
+        counter++;  // Increment under the mutex
+        pthread_mutex_unlock(&counter_mutex);
     }
     return NULL;
 }

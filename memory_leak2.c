@@ -44,6 +44,7 @@ int main() {
             perror("Failed to allocate memory for innerArray");
             // Free already allocated memory before exiting
             for (int j = 0; j <= i; j++) {
+                free(outerArray[j]->innerArray);
                 free(outerArray[j]);
             }
             free(outerArray);
@@ -58,10 +59,10 @@ int main() {
 
     // ... Use outerArray and its inner arrays ...
 
-    // Free the meta-array but forget to free the inner arrays
+    // Free each inner array before freeing its struct
     for (int i = 0; i < numStructs; ++i) {
-        // Memory leak: innerArray not freed
-        free(outerArray[i]); // Only freeing the struct, not its innerArray
+        free(outerArray[i]->innerArray);
+        free(outerArray[i]);
     }
     free(outerArray);
 

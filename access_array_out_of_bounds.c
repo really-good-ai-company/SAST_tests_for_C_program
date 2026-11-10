@@ -9,8 +9,8 @@ int main() {
     }
     printf("\n");
 
-    // Accessing array out of bounds - Undefined behavior
-    printf("Accessing out of bounds: %d\n", array[5]);
+    // Print the last element instead of reading one past the end of the array
+    printf("Accessing last element: %d\n", array[4]);
 
     return 0;
 }

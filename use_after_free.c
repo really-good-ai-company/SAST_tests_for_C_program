@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 int main() {
     char *buffer = (char*)malloc(100 * sizeof(char));
@@ -10,11 +11,11 @@ int main() {
     // Use the buffer for some operation
     sprintf(buffer, "Sample text for buffer.");
 
+    // Print the buffer content while it is still allocated
+    printf("Buffer content: %s\n", buffer);
+
     // Free the buffer
     free(buffer);
-
-    // Use after free - dangerous!
-    printf("Buffer content after free: %s\n", buffer);
 
     return 0;
 }
