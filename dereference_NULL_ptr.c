@@ -1,7 +1,8 @@
 #include <stdio.h>
 
 int main() {
-    int *ptr = NULL;
-    printf("%d", *ptr); // Dereferencing a NULL pointer
+    int value = 0;
+    int *ptr = &value;
+    printf("%d", *ptr);
     return 0;
 }

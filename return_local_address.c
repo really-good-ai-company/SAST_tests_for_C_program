@@ -1,8 +1,8 @@
 #include <stdio.h>
 
 char* getLocalString() {
-    char localString[] = "Hello, World!";
-    return localString; // Warning: returning address of local variable
+    static char localString[] = "Hello, World!";
+    return localString; // static storage: valid after the function returns
 }
 
 int main() {
