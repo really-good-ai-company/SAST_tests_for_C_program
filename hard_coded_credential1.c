@@ -7,14 +7,18 @@
 #include <string.h>
 
 int main() {
-    char inputPassword[50];
-    const char *hardcodedPassword = "secret123";  // Hardcoded password
+    char inputPassword[50] = "";
+    const char *expectedPassword = getenv("APP_ACCESS_PASSWORD");  // Supplied by the deployment, not the source
 
     printf("Enter password to access the system file: ");
-    fgets(inputPassword, sizeof(inputPassword), stdin);
+    if (fgets(inputPassword, sizeof(inputPassword), stdin) == NULL) {
+        fprintf(stderr, "No password read.\n");
+        return 1;
+    }
     inputPassword[strcspn(inputPassword, "\n")] = 0; // Remove newline character
 
-    if (strcmp(inputPassword, hardcodedPassword) == 0) {
+    if (expectedPassword != NULL && expectedPassword[0] != '\0' &&
+        strcmp(inputPassword, expectedPassword) == 0) {
         printf("Access granted. Reading system file...\n");
 
         // Attempting to read a system-critical file (with a fake filename)

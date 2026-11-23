@@ -14,21 +14,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 
 int main() {
     char userInput[256];
-    char command[300] = "echo ";
 
     printf("Enter a command: ");
     fgets(userInput, sizeof(userInput), stdin);
     userInput[strcspn(userInput, "\n")] = 0; // Remove newline character
 
-    // Dangerous: appending user input directly to a system command
-    strcat(command, userInput);
+    // Reject anything the shell would interpret as a separator, redirection or expansion
+    if (strpbrk(userInput, ";|&$`\\\"'<>(){}[]*?~!#/\n\r") != NULL) {
+        printf("Input contains characters that are not allowed.\n");
+        return 1;
+    }
 
-    // Execute the command - This is a security risk!
-    system(command);
+    // Run echo directly instead of through a shell
+    execlp("echo", "echo", userInput, (char *)NULL);
+    perror("execlp");
+    return 1;
 
     return 0;
 }

@@ -49,10 +49,14 @@ int main() {
 
 
 // Now asks for user input and execute it without sanitization (SQL injection)
-    char user_input[256];
+    char user_input[256] = {0};
     printf("Enter a SQL command: ");
     // Example user input:INSERT INTO Users(Id, Name) VALUES(1, 'Alice'); DROP TABLE Users;
-    fgets(user_input, 256, stdin);
+    if (fgets(user_input, 256, stdin) == NULL) {
+        fprintf(stderr, "No input read\n");
+        sqlite3_close(db);
+        return 1;
+    }
     user_input[strcspn(user_input, "\n")] = 0; // Remove newline character
     rc = sqlite3_exec(db, user_input, 0, 0, &err_msg);
 
