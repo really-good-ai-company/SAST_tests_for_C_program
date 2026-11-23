@@ -58,6 +58,14 @@ int main() {
         return 1;
     }
     user_input[strcspn(user_input, "\n")] = 0; // Remove newline character
+    // Only a single statement is accepted: reject statement separators and
+    // comment markers so an injected statement cannot follow the first one.
+    if (strpbrk(user_input, ";") != NULL || strstr(user_input, "--") != NULL ||
+        strstr(user_input, "/*") != NULL) {
+        fprintf(stderr, "Only one SQL statement, without comments, is allowed\n");
+        sqlite3_close(db);
+        return 1;
+    }
     rc = sqlite3_exec(db, user_input, 0, 0, &err_msg);
 
 // Check that the table was dropped by user, SQL injection was successful.

@@ -21,7 +21,10 @@ int main() {
     char userInput[256];
 
     printf("Enter a command: ");
-    fgets(userInput, sizeof(userInput), stdin);
+    if (fgets(userInput, sizeof(userInput), stdin) == NULL) {
+        printf("No input read.\n");
+        return 1;
+    }
     userInput[strcspn(userInput, "\n")] = 0; // Remove newline character
 
     // Reject anything the shell would interpret as a separator, redirection or expansion
