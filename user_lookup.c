@@ -6,6 +6,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
 #define NAME_LEN 32
 
@@ -21,7 +24,7 @@ static int parse_record(const char *line, struct record *out) {
     }
 
     size_t name_len = (size_t)(sep - line);
-    if (name_len > NAME_LEN) {
+    if (name_len >= NAME_LEN) {
         return -1;
     }
 
@@ -32,10 +35,15 @@ static int parse_record(const char *line, struct record *out) {
 }
 
 static void print_groups(const struct record *rec) {
-    char command[64];
+    pid_t pid = fork();
 
-    snprintf(command, sizeof(command), "id -Gn %s", rec->name);
-    system(command);
+    if (pid == 0) {
+        execlp("id", "id", "-Gn", rec->name, (char *)NULL);
+        _exit(127);
+    }
+    if (pid > 0) {
+        waitpid(pid, NULL, 0);
+    }
 }
 
 int main() {
